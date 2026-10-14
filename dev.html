@@ -304,6 +304,7 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
 .dev { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; scroll-margin-top: 90px; }
 .dev-top { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 28px; align-items: center; padding: 32px 36px; color: #fff; background: linear-gradient(115deg, var(--b1) 0 55%, var(--b2) 55% 100%); }
 .dev-top .ghost { position: absolute; right: -8px; bottom: -26px; z-index: -1; font-family: var(--font-en); font-size: clamp(80px, 12vw, 160px); line-height: 1; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.22); white-space: nowrap; }
+.dev-icon.real { background: linear-gradient(180deg,#5cc2fa,#1d6fb8); border: 0; box-shadow: 0 14px 26px -12px rgba(0,0,0,.5); }
 .dev-icon { width: 120px; height: 120px; border-radius: 28px; display: grid; place-items: center; font-family: var(--font-en); font-size: 44px; background: rgba(255,255,255,.14); border: 2px dashed rgba(255,255,255,.55); }
 .dev-top h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.3; margin: 8px 0 6px; }
 .dev-top p { margin: 0; opacity: .92; max-width: 40em; }
@@ -371,7 +372,7 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
         <span class="ja">製作中のアプリ</span>
         <p>いま作っているアプリの機能や、完成までの道のりを紹介します。公開までの様子を、少しずつ更新していきます。</p>
       </div>
-      <nav class="jump" aria-label="製作中のアプリ一覧"><a href="#boatrise" style="--c:#2a6fd6"><span class="dot"></span>ボートライズ</a><a href="#shiketai" style="--c:#e8452c"><span class="dot"></span>シケタイマッチング</a><a href="#juken" style="--c:#1e9e5a"><span class="dot"></span>受験まとめ</a></nav>
+      <nav class="jump" aria-label="製作中のアプリ一覧"><a href="#boatrise" style="--c:#2a6fd6"><span class="dot"></span>ボートライズ</a><a href="#shiketai" style="--c:#4fb6ef"><span class="dot"></span>シケタイマッチング</a><a href="#juken" style="--c:#1e9e5a"><span class="dot"></span>受験まとめ</a></nav>
     </div>
     <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   </div>
@@ -404,29 +405,25 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
           </div>
         </div>
       </article>
-      <article class="dev" id="shiketai" style="--b1:#b23a6c;--b2:#d9608e">
+      <article class="dev" id="shiketai" style="--b1:#1d6fb8;--b2:#4fb6ef">
         <div class="dev-top">
-          <span class="ghost" aria-hidden="true">MATCHING</span>
-          <div class="dev-icon" aria-hidden="true">SM</div>
+          <span class="ghost" aria-hidden="true">SHIKETAI</span>
+          <div class="dev-icon real" aria-hidden="true"><svg viewBox="0 0 24 24" width="56%" height="56%" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5"/><path d="M19 8v3"/><path d="M8 9h3M8 13h4"/><circle cx="16.5" cy="16.5" r="3"/><path d="m21 21-2.4-2.4"/></svg></div>
           <div>
-            <span class="status">開発中</span><span class="tmp-note">紹介文は仮</span>
+            <span class="status">開発中</span>
             <h2>シケタイマッチング</h2>
-            <p>人と人をつなぐマッチングアプリを開発中です。</p>
+            <p>同じ学科の過去問を、みんなで共有。大学・学部・学科ごとに、定期試験の過去問を見せ合える試験対策アプリです。</p>
           </div>
         </div>
         <div class="dev-body">
           <div>
             <h3><small>FEATURES</small>機能紹介</h3>
-            <ul class="features"><li><div><b>機能1（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能2（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能3（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li></ul>
+            <ul class="features"><li><div><b>学科ごとに過去問を共有</b><span>登録した大学・学部・学科の中だけで、科目・年度ごとに過去問を閲覧・投稿できます。</span></div></li><li><div><b>画像10枚またはPDFで投稿</b><span>問題用紙を写真（最大10枚）か PDF で投稿。答案や個人情報が写っていないか、投稿前に確認する仕組みです。</span></div></li><li><div><b>ログイン不要・安心の通報機能</b><span>メールやパスワードの登録は不要で、所属を選ぶと ID が自動で発行されます。通報が3件集まった投稿は自動で非表示になります。</span></div></li></ul>
           </div>
           <div>
             <h3><small>PROCESS</small>制作過程</h3>
             <div class="stages" aria-label="開発の進み具合（現在：開発）"><span class="done">企画</span><span class="done">設計</span><span class="now">開発</span><span class="">テスト</span><span class="">リリース</span></div>
-            <ol class="log">
-              <li><time>時期（準備中）</time>企画スタート：アプリを作ろうと思ったきっかけが入ります。</li>
-              <li><time>時期（準備中）</time>デザイン・設計：画面づくりで工夫したことが入ります。</li>
-              <li><time>時期（準備中）</time>開発中：今取り組んでいることが入ります。</li>
-            </ol>
+            <ol class="log"><li><time>2026.10</time>企画・開発スタート。閲覧・投稿・通報・所属登録の画面をひと通り作りました。</li><li><time>2026.10</time>ログインをなくし、所属登録の時に ID を自動で発行する方式に変更しました。</li><li><time>2026.10</time>サーバー（Firebase）と連携し、同じ学科の人と過去問を共有できるようになりました。</li><li><time>2026.10</time>所属の変更（有料）や、投稿の削除ルールなど公開に向けた仕組みを追加しました。</li></ol>
             
           </div>
         </div>
@@ -436,7 +433,7 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
           <span class="ghost" aria-hidden="true">EXAM NOTE</span>
           <div class="dev-icon" aria-hidden="true">受</div>
           <div>
-            <span class="status tf">TestFlight でテスト中</span><span class="tmp-note">紹介文は仮</span>
+            <span class="status">TestFlight でテスト中</span><span class="tmp-note">紹介文は仮</span>
             <h2>受験まとめ</h2>
             <p>受験に必要な情報をひとつにまとめるアプリです。TestFlight でベータ版を公開しています。</p>
           </div>
@@ -452,9 +449,9 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
             <ol class="log">
               <li><time>時期（準備中）</time>企画スタート：アプリを作ろうと思ったきっかけが入ります。</li>
               <li><time>時期（準備中）</time>デザイン・設計：画面づくりで工夫したことが入ります。</li>
-              <li><time>時期（準備中）</time>TestFlight でベータ版を公開しました。</li>
+              <li><time>時期（準備中）</time>TestFlight でベータ版のテストを始めました。</li>
             </ol>
-            <div class="tf-box"><b>ベータテスターを募集予定</b><br>TestFlight の参加リンクは準備ができしだい、ここに掲載します。</div>
+            
           </div>
         </div>
       </article>
