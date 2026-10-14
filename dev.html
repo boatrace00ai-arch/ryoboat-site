@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>製作中のアプリ｜ryoboat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="ryoboat は iOS アプリの開発と Web サイト制作を行う個人スタジオです。">
+<link rel="canonical" href="https://www.ryoboat.com/dev.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.ryoboat.com/dev.html">
+<meta property="og:site_name" content="ryoboat">
+<meta property="og:title" content="製作中のアプリ｜ryoboat">
+<meta property="og:description" content="AI競艇予想、JackPot競艇予想、LIKE M、シークレット収支、LumiStudy などの iOS アプリを開発しています。アプリ開発・Webページ制作のご依頼も承ります。">
+<meta property="og:image" content="https://www.ryoboat.com/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="製作中のアプリ｜ryoboat">
+<meta name="twitter:description" content="iOS アプリの紹介と、アプリ開発・Webページ制作のご依頼はこちら。">
+<meta name="twitter:image" content="https://www.ryoboat.com/ogp.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 夜の水面のような濃紺の帯と明るい紙面を交互に重ねる。英字の大見出し＋和文サブタイトル、競艇の6枠カラーを全体のアクセントに使う */
+:root {
+  --paper: #f4f6f9;
+  --surface: #ffffff;
+  --ink: #0c1a2c;
+  --muted: #586a7e;
+  --line: #d9e1ea;
+  --night: #0a1626;       /* 濃紺の帯（両テーマ共通） */
+  --night-2: #12243a;
+  --night-ink: #f1f5fa;
+  --night-muted: #9fb2c7;
+  --night-line: #233a55;
+  --accent: #e8452c;      /* 3号艇の赤 */
+  --accent-ink: #ffffff;
+  --lane1: #ffffff; --lane2: #1b1b1b; --lane3: #e8452c; --lane4: #2a6fd6; --lane5: #f5c518; --lane6: #1e9e5a;
+  --font-en: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --font-display: "Dela Gothic One", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1b2b; --surface: #15263b; --ink: #edf2f8; --muted: #9aaec3; --line: #253c57;
+    --night: #060e19; --night-2: #0d1a2b; --night-line: #1d3048;
+    --accent: #ff5a3c; --accent-ink: #1b0904;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1b2b; --surface: #15263b; --ink: #edf2f8; --muted: #9aaec3; --line: #253c57;
+  --night: #060e19; --night-2: #0d1a2b; --night-line: #1d3048;
+  --accent: #ff5a3c; --accent-ink: #1b0904;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.85;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--lane5); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.night { background: var(--night); color: var(--night-ink); }
+
+/* 6枠カラーのストライプ */
+.lanes { display: flex; height: 6px; }
+.lanes i { flex: 1; }
+.lanes i:nth-child(1) { background: var(--lane1); } .lanes i:nth-child(2) { background: var(--lane2); }
+.lanes i:nth-child(3) { background: var(--lane3); } .lanes i:nth-child(4) { background: var(--lane4); }
+.lanes i:nth-child(5) { background: var(--lane5); } .lanes i:nth-child(6) { background: var(--lane6); }
+.night .lanes i:nth-child(2) { background: #3a4656; }
+
+/* Header */
+.site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--night) 92%, transparent); color: var(--night-ink);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--night-line);
+}
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.logo { font-family: var(--font-en); font-size: 26px; letter-spacing: .06em; text-decoration: none; display: flex; align-items: center; gap: 10px; line-height: 1; }
+.logo svg { width: 28px; height: 28px; }
+.nav { display: flex; gap: 4px 26px; flex-wrap: wrap; justify-content: flex-end; }
+.nav a { text-decoration: none; display: grid; line-height: 1.2; text-align: center; }
+.nav a b { font-family: var(--font-en); font-weight: 400; font-size: 15px; letter-spacing: .1em; }
+.nav a span { font-size: 10px; color: var(--night-muted); }
+.nav a:hover b { color: var(--lane5); }
+.nav .contact-link { background: var(--accent); color: var(--accent-ink); padding: 8px 16px; border-radius: 4px; }
+.nav .contact-link span { color: inherit; opacity: .85; }
+.nav .contact-link:hover b { color: inherit; }
+@media (max-width: 640px) { .nav .hide-sm { display: none; } }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; pointer-events: none; }
+.hero-bg svg { width: 100%; height: 100%; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: center; padding-block: 80px 96px; }
+@media (max-width: 880px) { .hero .wrap { grid-template-columns: 1fr; padding-block: 56px 64px; } }
+.hero-copy { min-width: 0; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .18em; color: var(--lane5); }
+.kicker::before { content: ""; width: 28px; height: 2px; background: currentColor; }
+.hero-en {
+  font-family: var(--font-en); font-weight: 400; line-height: .9; letter-spacing: .01em;
+  font-size: clamp(64px, 13vw, 168px); margin: 18px 0 10px;
+  color: transparent; -webkit-text-stroke: 2px var(--night-ink);
+}
+.hero-en span { color: var(--night-ink); -webkit-text-stroke: 0; }
+.hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.4; margin: 0 0 18px; text-wrap: balance; }
+.hero h1 em { font-style: normal; color: var(--lane5); }
+.hero p.lead { max-width: 32em; color: var(--night-muted); margin: 0 0 30px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 26px; border-radius: 4px; font-weight: 700; font-size: 15px;
+  text-decoration: none; border: 2px solid currentColor; background: transparent; color: inherit;
+  cursor: pointer; font-family: inherit; transition: transform .2s ease, background-color .2s ease;
+}
+.btn::after { content: "→"; font-family: var(--font-mono); }
+.btn:hover { transform: translateX(2px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+/* Hero visual: 6艇のアプリ「出走表」 */
+.racecard { background: var(--night-2); border: 1px solid var(--night-line); border-radius: 6px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+.racecard-head { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 18px; border-bottom: 1px solid var(--night-line); }
+.racecard-head b { font-family: var(--font-en); font-weight: 400; font-size: 20px; letter-spacing: .08em; }
+.racecard-head span { font-family: var(--font-mono); font-size: 11px; color: var(--night-muted); }
+.racecard ol { list-style: none; margin: 0; padding: 0; }
+.racecard li a { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 14px; padding: 11px 18px 11px 0; border-bottom: 1px solid var(--night-line); text-decoration: none; transition: background-color .2s ease; }
+.racecard li:last-child a { border-bottom: 0; }
+.racecard li a:hover { background: rgba(255,255,255,.04); }
+.waku { height: 100%; min-height: 40px; display: grid; place-items: center; font-family: var(--font-en); font-size: 20px; }
+.waku.w1 { background: var(--lane1); color: #111; } .waku.w2 { background: #262626; color: #fff; }
+.waku.w3 { background: var(--lane3); color: #fff; } .waku.w4 { background: var(--lane4); color: #fff; }
+.waku.w5 { background: var(--lane5); color: #111; } .waku.w6 { background: var(--lane6); color: #fff; }
+.racecard .rname { font-weight: 700; font-size: 14.5px; line-height: 1.35; min-width: 0; }
+.racecard .rname small { display: block; font-weight: 400; font-size: 11px; color: var(--night-muted); }
+.racecard .go { font-family: var(--font-mono); font-size: 11px; color: var(--lane5); white-space: nowrap; }
+.racecard li.next .rname { color: var(--night-muted); }
+
+/* NEWS */
+.news { border-bottom: 1px solid var(--line); background: var(--surface); }
+.news .wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: center; padding-block: 18px; }
+.news h2 { margin: 0; font-family: var(--font-en); font-weight: 400; font-size: 22px; letter-spacing: .1em; line-height: 1; }
+.news ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.news li { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; }
+.news time { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 1px; }
+.tag-tmp { font-size: 10.5px; color: var(--accent); border: 1px dashed currentColor; border-radius: 3px; padding: 0 6px; line-height: 1.7; align-self: center; }
+
+/* Section heading */
+section.block { padding-block: 96px; }
+@media (max-width: 640px) { section.block { padding-block: 64px; } }
+.heading { display: grid; gap: 4px; margin-bottom: 44px; }
+.heading .en { font-family: var(--font-en); font-weight: 400; font-size: clamp(56px, 9vw, 112px); line-height: .9; letter-spacing: .02em; }
+.heading .ja { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 16px; letter-spacing: .12em; }
+.heading .ja::before { content: ""; width: 36px; height: 3px; background: var(--accent); }
+.heading p { margin: 14px 0 0; color: var(--muted); max-width: 38em; }
+.night .heading p { color: var(--night-muted); }
+
+/* App banners */
+.apps { display: grid; gap: 22px; }
+.banner {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; align-items: center; gap: 32px;
+  min-height: 230px; padding: 32px 40px; border-radius: 6px;
+  color: #fff; text-decoration: none; background: var(--b1);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.banner::before { /* 斜めの色面 */
+  content: ""; position: absolute; inset: 0; z-index: -2;
+  background: linear-gradient(115deg, var(--b1) 0 52%, var(--b2) 52% 100%);
+}
+.banner::after { /* 水面ライン */
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: .14;
+  background: repeating-linear-gradient(-8deg, transparent 0 22px, #fff 22px 23px);
+}
+.banner:hover { transform: translateY(-3px); box-shadow: 0 22px 40px -24px rgba(10,22,38,.55); }
+.banner .ghost {
+  position: absolute; right: -10px; bottom: -28px; z-index: -1;
+  font-family: var(--font-en); font-size: clamp(90px, 14vw, 180px); line-height: 1; letter-spacing: .02em;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.22); white-space: nowrap; pointer-events: none;
+}
+.banner .icon {
+  width: 150px; height: 150px; border-radius: 34px; display: grid; place-items: center;
+  font-family: var(--font-en); font-size: 54px; letter-spacing: .02em;
+  background: var(--ic); color: #fff; box-shadow: 0 18px 30px -14px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.2);
+}
+.banner .icon { position: relative; overflow: hidden; }
+.banner .icon img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.banner .body { min-width: 0; }
+.banner .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; opacity: .9; }
+.banner .meta .chip { background: rgba(255,255,255,.16); border-radius: 3px; padding: 1px 8px; }
+.banner .meta .tmp { border: 1px dashed rgba(255,255,255,.7); border-radius: 3px; padding: 0 7px; }
+.banner h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 3vw, 34px); line-height: 1.35; margin: 8px 0 8px; text-wrap: balance; }
+.banner p { margin: 0; font-size: 14.5px; line-height: 1.8; max-width: 34em; opacity: .92; }
+.store {
+  display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+  background: #000; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 10px; padding: 10px 18px;
+  font-size: 13px; line-height: 1.2;
+}
+.store svg { width: 24px; height: 24px; }
+.store small { display: block; font-size: 10px; opacity: .8; }
+.store strong { font-size: 17px; font-weight: 700; letter-spacing: .01em; }
+.banner.dark-text { color: #111a26; }
+.banner.dark-text .ghost { -webkit-text-stroke-color: rgba(17,26,38,.16); }
+.banner.dark-text .meta .chip { background: rgba(17,26,38,.1); }
+.banner.dark-text .meta .tmp { border-color: rgba(17,26,38,.55); }
+.banner.dark-text::after { background: repeating-linear-gradient(-8deg, transparent 0 22px, #111a26 22px 23px); opacity: .07; }
+@media (max-width: 820px) {
+  .banner { grid-template-columns: 96px minmax(0, 1fr); gap: 18px 20px; padding: 24px; min-height: 0; }
+  .banner .icon { width: 96px; height: 96px; border-radius: 22px; font-size: 34px; }
+  .banner .store { grid-column: 1 / -1; justify-self: start; }
+}
+@media (max-width: 460px) {
+  .banner { grid-template-columns: 1fr; }
+  .banner .icon { width: 80px; height: 80px; border-radius: 19px; font-size: 28px; }
+}
+
+/* Services */
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 820px) { .services { grid-template-columns: 1fr; } }
+.service { position: relative; overflow: hidden; background: var(--night-2); border: 1px solid var(--night-line); border-radius: 6px; padding: 40px 36px 36px; display: flex; flex-direction: column; gap: 16px; }
+.service .big { position: absolute; top: -18px; right: 18px; font-family: var(--font-en); font-size: 140px; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px var(--night-line); pointer-events: none; }
+.service .label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; color: var(--lane5); position: relative; }
+.service h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 2.8vw, 30px); margin: 0; line-height: 1.4; position: relative; }
+.service > p { margin: 0; color: var(--night-muted); position: relative; }
+.service ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.service li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 15px; }
+.service li::before { content: ""; width: 14px; height: 14px; margin-top: .45em; background: var(--accent); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; margin-top: auto; padding-top: 10px; counter-reset: step; }
+.steps span { counter-increment: step; background: var(--night); padding: 10px 8px; font-size: 12.5px; font-weight: 700; text-align: center; line-height: 1.4; }
+.steps span::before { content: "0" counter(step); display: block; font-family: var(--font-en); font-weight: 400; font-size: 18px; color: var(--lane5); letter-spacing: .04em; }
+.service .btn { align-self: flex-start; margin-top: 6px; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.5fr); gap: 48px; align-items: start; }
+@media (max-width: 900px) { .contact { grid-template-columns: 1fr; gap: 8px; } }
+.contact-aside > p { color: var(--muted); margin: 0 0 18px; }
+.mail-card { background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--accent); border-radius: 4px; padding: 16px 18px; display: grid; gap: 8px; }
+.mail-card small { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--muted); }
+.mail-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.mail-row span { font-family: var(--font-mono); font-size: 16px; user-select: all; overflow-wrap: anywhere; }
+.mini { font-family: var(--font-body); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 3px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 28px; }
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: -28px -28px 26px; border-bottom: 1px solid var(--line); }
+.tab { border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-family: inherit; font-size: 14px; font-weight: 700; padding: 18px 10px 15px; cursor: pointer; line-height: 1.4; }
+.tab small { display: block; font-family: var(--font-en); font-weight: 400; font-size: 13px; letter-spacing: .1em; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+@media (max-width: 520px) { .tab { font-size: 12px; padding-inline: 4px; } }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 13px; font-weight: 700; }
+.field label .req { color: var(--accent); font-weight: 500; margin-left: 6px; font-size: 11px; }
+input, select, textarea {
+  width: 100%; font: inherit; font-size: 15px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 11px 12px;
+}
+textarea { min-height: 140px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--lane4); outline-offset: 0; border-color: transparent; }
+.form-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-top: 22px; }
+.form-foot small { color: var(--muted); }
+.result { margin-top: 22px; border: 1px dashed var(--lane4); border-radius: 4px; padding: 16px; }
+.result h4 { margin: 0 0 6px; font-size: 15px; }
+.result p { margin: 0 0 10px; font-size: 13.5px; color: var(--muted); }
+.result pre { margin: 0 0 10px; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-mono); font-size: 12.5px; background: var(--paper); border-radius: 4px; padding: 12px; max-height: 260px; overflow: auto; }
+
+/* Footer */
+footer .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; padding-block: 56px 36px; }
+@media (max-width: 640px) { footer .wrap { grid-template-columns: 1fr; } }
+footer .wordmark { font-family: var(--font-en); font-size: clamp(56px, 10vw, 120px); line-height: .9; letter-spacing: .03em; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
+footer nav a { text-decoration: none; color: var(--night-muted); }
+footer nav a:hover { color: var(--night-ink); }
+footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12px; color: var(--night-muted); border-top: 1px solid var(--night-line); padding-top: 18px; }
+
+/* ---- dev page ---- */
+.nav a[aria-current="page"] b { color: var(--lane5); }
+.dev-hero .wrap { padding-block: 72px 64px; }
+.dev-hero .heading { margin-bottom: 0; }
+.dev-hero .heading .en { -webkit-text-stroke: 0; }
+.jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.jump a { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; border: 1px solid var(--night-line); background: var(--night-2); border-radius: 4px; padding: 10px 16px; font-weight: 700; font-size: 14px; }
+.jump a:hover { border-color: var(--lane5); }
+.jump .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.devs { display: grid; gap: 40px; }
+.dev { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; scroll-margin-top: 90px; }
+.dev-top { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 28px; align-items: center; padding: 32px 36px; color: #fff; background: linear-gradient(115deg, var(--b1) 0 55%, var(--b2) 55% 100%); }
+.dev-top .ghost { position: absolute; right: -8px; bottom: -26px; z-index: -1; font-family: var(--font-en); font-size: clamp(80px, 12vw, 160px); line-height: 1; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.22); white-space: nowrap; }
+.dev-icon { width: 120px; height: 120px; border-radius: 28px; display: grid; place-items: center; font-family: var(--font-en); font-size: 44px; background: rgba(255,255,255,.14); border: 2px dashed rgba(255,255,255,.55); }
+.dev-top h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.3; margin: 8px 0 6px; }
+.dev-top p { margin: 0; opacity: .92; max-width: 40em; }
+.status { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; background: rgba(0,0,0,.28); border-radius: 3px; padding: 3px 10px; }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--lane5); }
+.status.tf::before { background: #5ee08f; }
+.tmp-note { display: inline-block; margin-left: 8px; font-size: 11px; border: 1px dashed rgba(255,255,255,.7); border-radius: 3px; padding: 1px 7px; vertical-align: middle; }
+.dev-body { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 0; }
+.dev-body > div { padding: 32px 36px; min-width: 0; }
+.dev-body > div + div { border-left: 1px solid var(--line); }
+.dev-body h3 { display: flex; align-items: baseline; gap: 12px; margin: 0 0 18px; font-size: 16px; font-weight: 900; letter-spacing: .08em; }
+.dev-body h3 small { font-family: var(--font-en); font-weight: 400; font-size: 20px; letter-spacing: .08em; color: var(--accent); }
+.features { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.features li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+.features li::before { content: ""; width: 14px; height: 14px; margin-top: .45em; background: var(--accent); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.features b { display: block; font-size: 15px; }
+.features span { font-size: 14px; color: var(--muted); }
+.stages { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 3px; margin-bottom: 22px; }
+.stages span { text-align: center; font-size: 12px; font-weight: 700; padding: 8px 2px; background: var(--paper); color: var(--muted); line-height: 1.3; }
+.stages span.done { background: var(--sea-done, #d6e3f3); color: var(--ink); }
+.stages span.now { background: var(--accent); color: var(--accent-ink); }
+.log { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 2px solid var(--line); display: grid; gap: 16px; }
+.log li { position: relative; font-size: 14px; }
+.log li::before { content: ""; position: absolute; left: -25px; top: .55em; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.log time { display: block; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tf-box { margin-top: 22px; border: 1px dashed var(--line); border-radius: 4px; padding: 14px 16px; font-size: 14px; color: var(--muted); }
+.tf-box b { color: var(--ink); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sea-done: #23405f; } }
+:root[data-theme="dark"] { --sea-done: #23405f; }
+@media (max-width: 820px) {
+  .dev-body { grid-template-columns: 1fr; }
+  .dev-body > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .dev-top { grid-template-columns: 84px minmax(0,1fr); gap: 18px; padding: 24px; }
+  .dev-icon { width: 84px; height: 84px; border-radius: 20px; font-size: 30px; }
+  .dev-body > div { padding: 24px; }
+}
+@media (max-width: 460px) { .dev-top { grid-template-columns: 1fr; } .stages span { font-size: 10.5px; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.3c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4z"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="ryoboat トップへ">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 20h26l-5 7H8z" fill="currentColor"/><path d="M15 3v15M15 4l10 13H15" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round"/></svg>
+      RYOBOAT
+    </a>
+    <nav class="nav" aria-label="メインメニュー">
+      <a href="./#apps"><b>APPS</b><span>アプリ紹介</span></a>
+      <a href="dev.html" aria-current="page"><b>DEV</b><span>製作中のアプリ</span></a>
+      <a href="./#services" class="hide-sm"><b>SERVICE</b><span>制作のご依頼</span></a>
+      <a href="./#contact" class="contact-link"><b>CONTACT</b><span>お問い合わせ</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="night dev-hero">
+    <div class="wrap">
+      <div class="heading">
+        <span class="en">IN DEVELOPMENT</span>
+        <span class="ja">製作中のアプリ</span>
+        <p>いま作っているアプリの機能や、完成までの道のりを紹介します。公開までの様子を、少しずつ更新していきます。</p>
+      </div>
+      <nav class="jump" aria-label="製作中のアプリ一覧"><a href="#boatrise" style="--c:#2a6fd6"><span class="dot"></span>ボートライズ</a><a href="#shiketai" style="--c:#e8452c"><span class="dot"></span>シケタイマッチング</a><a href="#juken" style="--c:#1e9e5a"><span class="dot"></span>受験まとめ</a></nav>
+    </div>
+    <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <section class="block">
+    <div class="wrap devs">
+      <article class="dev" id="boatrise" style="--b1:#0f3a66;--b2:#1d5c8c">
+        <div class="dev-top">
+          <span class="ghost" aria-hidden="true">BOAT RISE</span>
+          <div class="dev-icon" aria-hidden="true">BR</div>
+          <div>
+            <span class="status">開発中</span><span class="tmp-note">紹介文は仮</span>
+            <h2>ボートライズ</h2>
+            <p>競艇をもっと楽しむための新しいアプリを開発中です。</p>
+          </div>
+        </div>
+        <div class="dev-body">
+          <div>
+            <h3><small>FEATURES</small>機能紹介</h3>
+            <ul class="features"><li><div><b>機能1（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能2（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能3（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li></ul>
+          </div>
+          <div>
+            <h3><small>PROCESS</small>制作過程</h3>
+            <div class="stages" aria-label="開発の進み具合（現在：開発）"><span class="done">企画</span><span class="done">設計</span><span class="now">開発</span><span class="">テスト</span><span class="">リリース</span></div>
+            <ol class="log">
+              <li><time>時期（準備中）</time>企画スタート：アプリを作ろうと思ったきっかけが入ります。</li>
+              <li><time>時期（準備中）</time>デザイン・設計：画面づくりで工夫したことが入ります。</li>
+              <li><time>時期（準備中）</time>開発中：今取り組んでいることが入ります。</li>
+            </ol>
+            
+          </div>
+        </div>
+      </article>
+      <article class="dev" id="shiketai" style="--b1:#b23a6c;--b2:#d9608e">
+        <div class="dev-top">
+          <span class="ghost" aria-hidden="true">MATCHING</span>
+          <div class="dev-icon" aria-hidden="true">SM</div>
+          <div>
+            <span class="status">開発中</span><span class="tmp-note">紹介文は仮</span>
+            <h2>シケタイマッチング</h2>
+            <p>人と人をつなぐマッチングアプリを開発中です。</p>
+          </div>
+        </div>
+        <div class="dev-body">
+          <div>
+            <h3><small>FEATURES</small>機能紹介</h3>
+            <ul class="features"><li><div><b>機能1（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能2（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能3（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li></ul>
+          </div>
+          <div>
+            <h3><small>PROCESS</small>制作過程</h3>
+            <div class="stages" aria-label="開発の進み具合（現在：開発）"><span class="done">企画</span><span class="done">設計</span><span class="now">開発</span><span class="">テスト</span><span class="">リリース</span></div>
+            <ol class="log">
+              <li><time>時期（準備中）</time>企画スタート：アプリを作ろうと思ったきっかけが入ります。</li>
+              <li><time>時期（準備中）</time>デザイン・設計：画面づくりで工夫したことが入ります。</li>
+              <li><time>時期（準備中）</time>開発中：今取り組んでいることが入ります。</li>
+            </ol>
+            
+          </div>
+        </div>
+      </article>
+      <article class="dev" id="juken" style="--b1:#1d8f86;--b2:#3c6fd1">
+        <div class="dev-top">
+          <span class="ghost" aria-hidden="true">EXAM NOTE</span>
+          <div class="dev-icon" aria-hidden="true">受</div>
+          <div>
+            <span class="status tf">TestFlight でテスト中</span><span class="tmp-note">紹介文は仮</span>
+            <h2>受験まとめ</h2>
+            <p>受験に必要な情報をひとつにまとめるアプリです。TestFlight でベータ版を公開しています。</p>
+          </div>
+        </div>
+        <div class="dev-body">
+          <div>
+            <h3><small>FEATURES</small>機能紹介</h3>
+            <ul class="features"><li><div><b>機能1（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能2（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li><li><div><b>機能3（準備中）</b><span>ここに主な機能の説明が入ります。</span></div></li></ul>
+          </div>
+          <div>
+            <h3><small>PROCESS</small>制作過程</h3>
+            <div class="stages" aria-label="開発の進み具合（現在：テスト）"><span class="done">企画</span><span class="done">設計</span><span class="done">開発</span><span class="now">テスト</span><span class="">リリース</span></div>
+            <ol class="log">
+              <li><time>時期（準備中）</time>企画スタート：アプリを作ろうと思ったきっかけが入ります。</li>
+              <li><time>時期（準備中）</time>デザイン・設計：画面づくりで工夫したことが入ります。</li>
+              <li><time>時期（準備中）</time>TestFlight でベータ版を公開しました。</li>
+            </ol>
+            <div class="tf-box"><b>ベータテスターを募集予定</b><br>TestFlight の参加リンクは準備ができしだい、ここに掲載します。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="night">
+  <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="wrap">
+    <div class="wordmark">RYOBOAT</div>
+    <nav aria-label="フッター">
+      <a href="./#apps">アプリ紹介</a>
+      <a href="dev.html">製作中のアプリ</a>
+      <a href="./#services">制作のご依頼</a>
+      <a href="./#contact">お問い合わせ</a>
+    </nav>
+    <div class="copy">© 2026 ryoboat</div>
+  </div>
+</footer>
+</body>
+</html>
