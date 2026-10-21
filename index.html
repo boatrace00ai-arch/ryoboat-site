@@ -290,6 +290,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
 footer nav a { text-decoration: none; color: var(--night-muted); }
 footer nav a:hover { color: var(--night-ink); }
 footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12px; color: var(--night-muted); border-top: 1px solid var(--night-line); padding-top: 18px; }
+.runconnect-banner{scroll-margin-top:100px;--b1:#203d40;--b2:#345951;--ic:#203d40;grid-template-columns:120px minmax(0,1fr);gap:28px}.runconnect-banner .icon{width:120px;height:120px;border-radius:28px;box-shadow:none;background:#203d40}.runconnect-banner .policy-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.runconnect-banner .policy-links a{border:1px solid #b7cabd;padding:9px 13px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:700;background:#ffffff0d}.runconnect-banner .policy-links a:hover{background:#ffffff20}.runconnect-banner .policy-links a:first-child{background:#e2b987;color:#203d40;border-color:#e2b987}@media(max-width:460px){.runconnect-banner{grid-template-columns:1fr}.runconnect-banner .icon{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -375,7 +376,7 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
       <div class="heading">
         <span class="en">APPS</span>
         <span class="ja">アプリ紹介</span>
-        <p>バナーを押すと App Store のページが開きます。</p>
+        <p>配信中のアプリは App Storeへ。開発中のRunConnectは、紹介・各種規約をご覧いただけます。</p>
       </div>
 
       <div class="apps">
@@ -433,6 +434,15 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
           </span>
           <span class="store"><svg aria-hidden="true"><use href="#apple"/></svg><span><small>Download on the</small><strong>App Store</strong></span></span>
         </a>
+
+        <article class="banner runconnect-banner" id="runconnect" aria-labelledby="runconnect-title">
+          <span class="ghost" aria-hidden="true">RUN CONNECT</span>
+          <span class="icon" aria-hidden="true"><img src="icons/runconnect.svg" alt="" width="160" height="160" loading="lazy"></span>
+          <div class="body"><div class="meta"><span class="chip">ランニング</span><span>iOS · 開発中</span></div>
+            <h3 id="runconnect-title">RunConnect</h3><p>ひとりで走っても、同じチーム。オンラインで仲間と練習予定・走った記録を共有し、「ナイスラン」で励まし合うランニングアプリです。</p>
+            <nav class="policy-links" aria-label="RunConnectの紹介と規約"><a href="runconnect/">アプリ紹介</a><a href="runconnect/terms.html">利用規約</a><a href="runconnect/privacy.html">プライバシーポリシー</a><a href="runconnect/community.html">コミュニティルール</a><a href="runconnect/support.html">サポート</a></nav>
+          </div>
+        </article>
       </div>
     </div>
   </section>
