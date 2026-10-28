@@ -86,8 +86,9 @@ export const TableLayout = (() => {
   L.slings = [refs([[349, 616], [396, 718], [336, 689]]), refs([[656, 616], [611, 718], [670, 689]])];
   L.bumpers = [
     { center: ref(355, 169), radius: 10.5, event: E('attack', 3) }, // isolated Satellite
-    { center: ref(467, 266), radius: 11.5, event: E('attack', 0) },
-    { center: ref(541, 254), radius: 11.5, event: E('attack', 1) },
+    // Upper trio spread apart so balls fall through more often (kept in sync with Swift).
+    { center: ref(455, 262), radius: 11.5, event: E('attack', 0) },
+    { center: ref(541, 248), radius: 11.5, event: E('attack', 1) },
     { center: ref(503, 322), radius: 12, event: E('attack', 2) },
     { center: ref(269, 484), radius: 11, event: E('launchBumper', 0) },
     { center: ref(331, 498), radius: 11, event: E('launchBumper', 1) },

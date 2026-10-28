@@ -110,7 +110,7 @@ a { color: inherit; }
 .nav .contact-link { background: var(--accent); color: var(--accent-ink); padding: 8px 16px; border-radius: 4px; }
 .nav .contact-link span { color: inherit; opacity: .85; }
 .nav .contact-link:hover b { color: inherit; }
-@media (max-width: 640px) { .nav .hide-sm { display: none; } }
+@media (max-width: 640px) { .nav .hide-sm { display: none; } .nav { gap: 4px 16px; } }
 
 /* Hero */
 .hero { position: relative; overflow: hidden; }
@@ -364,6 +364,7 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
     <nav class="nav" aria-label="メインメニュー">
       <a href="./#apps"><b>APPS</b><span>アプリ紹介</span></a>
       <a href="dev.html" aria-current="page"><b>DEV</b><span>製作中のアプリ</span></a>
+      <a href="game.html"><b>GAME</b><span>ブラウザゲーム</span></a>
       <a href="./#services" class="hide-sm"><b>SERVICE</b><span>制作のご依頼</span></a>
       <a href="./#contact" class="contact-link"><b>CONTACT</b><span>お問い合わせ</span></a>
     </nav>
@@ -474,6 +475,7 @@ footer .copy { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 12
     <nav aria-label="フッター">
       <a href="./#apps">アプリ紹介</a>
       <a href="dev.html">製作中のアプリ</a>
+      <a href="game.html">ブラウザゲーム</a>
       <a href="./#services">制作のご依頼</a>
       <a href="./#contact">お問い合わせ</a>
     </nav>
