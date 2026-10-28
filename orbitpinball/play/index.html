@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#08101b">
+  <title>Orbit Pinball｜ブラウザで遊べる3Dピンボール</title>
+  <meta name="description" content="宇宙を舞台にした3Dピンボール。17のミッションと9つの階級を攻略してハイスコアを目指します。無料・登録不要でブラウザから遊べます。">
+  <meta property="og:title" content="Orbit Pinball｜ブラウザで遊べる3Dピンボール">
+  <meta property="og:description" content="狙って、弾いて、任務を達成しよう。無料・登録不要で遊べる3Dピンボール。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.ryoboat.com/orbitpinball/play/">
+  <meta property="og:image" content="https://www.ryoboat.com/orbitpinball/assets/icon-512.png">
+  <link rel="canonical" href="https://www.ryoboat.com/orbitpinball/play/">
+  <link rel="icon" href="../assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <a class="logo" href="../" title="Orbit Pinball の紹介ページへ">
+      <span class="spark" aria-hidden="true">✦</span>
+      <span><b>ORBIT PINBALL</b><small>3D SPACE PINBALL</small></span>
+    </a>
+    <nav class="icons">
+      <button id="btn-guide" type="button" aria-label="遊び方">?</button>
+      <button id="btn-sound" type="button" aria-label="効果音のオン・オフ"></button>
+      <button id="btn-pause" type="button" aria-label="一時停止"></button>
+    </nav>
+  </header>
+
+  <section class="lcd score-panel" aria-live="off">
+    <div class="score-left">
+      <div class="label"><i></i>TOTAL SCORE <em id="multiplier">×1</em></div>
+      <div id="score" class="score">0</div>
+    </div>
+    <div class="score-right">
+      <div class="balls"><span>BALL</span><span id="ball-dots" class="dots"></span><b id="ball-count">3 / 3</b><em id="extra-balls"></em></div>
+      <div id="rank" class="rank">CADET / 01</div>
+      <div class="best"><span>♛ 最高スコア</span><b id="best">0</b></div>
+    </div>
+  </section>
+
+  <section class="lcd mission-panel">
+    <span id="mission-bar" class="bar"></span>
+    <div class="mission-text">
+      <div class="info-row"><span id="info" class="info">射出ボタンを長押しして、宇宙へ。</span>
+        <span class="fuel"><small>FUEL</small><span id="fuel"></span></span></div>
+      <div id="mission" class="mission">ミッションターゲットに当てて任務を選択</div>
+    </div>
+    <button id="btn-nudge" type="button" class="nudge" aria-label="台を揺らす">✥</button>
+  </section>
+
+  <section class="stage">
+    <canvas id="table" aria-label="ピンボール盤面"></canvas>
+    <div id="hint" class="hint">LAUNCH を長押し → 離して射出</div>
+    <div id="loading" class="overlay center"><div class="spinner"></div><p>読み込み中…</p></div>
+    <div id="bonus" class="overlay bottom hidden"><div class="card">
+      <small>BALL BONUS</small><b id="bonus-count">+0</b><div class="meter"><i id="bonus-meter"></i></div><p id="bonus-note"></p>
+    </div></div>
+    <div id="gameover" class="overlay bottom hidden"><div class="card go">
+      <strong>GAME OVER</strong><b id="final-score">0</b><p id="final-missions"></p><p class="mint">フリッパーを押すとリスタート</p>
+    </div></div>
+    <div id="paused" class="overlay center dim hidden">
+      <small class="mint caps">FLIGHT PAUSED</small>
+      <h2>ひと息、宇宙の途中で。</h2>
+      <button id="btn-resume" type="button" class="primary">ゲームを再開</button>
+      <div class="row"><button id="btn-settings" type="button" class="link">設定</button><button id="btn-new" type="button" class="link">新しいゲーム</button></div>
+    </div>
+    <div id="start" class="overlay center dim hidden">
+      <small class="mint caps">3D SPACE PINBALL</small>
+      <h2>Orbit Pinball</h2>
+      <p class="keys">PC：<kbd>Z</kbd><kbd>/</kbd>（または <kbd>←</kbd><kbd>→</kbd>）フリッパー · <kbd>Space</kbd> 長押しで射出 · <kbd>N</kbd> 台を揺らす</p>
+      <button id="btn-start" type="button" class="primary">タップしてスタート</button>
+      <p class="note">音が出ます。音量にご注意ください。</p>
+    </div>
+  </section>
+
+  <section class="controls">
+    <button id="pad-left" type="button" class="pad flipper left" aria-label="左フリッパー">
+      <span class="emblem">↗</span><span class="txt"><b>LEFT</b><small>FLIPPER</small></span>
+    </button>
+    <button id="pad-launch" type="button" class="pad launch" aria-label="球を射出。長押しで強さを調整">
+      <span class="dial"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" class="track"/><circle id="charge-ring" cx="20" cy="20" r="17" class="charge"/></svg><span>↑</span></span>
+      <small id="launch-label">LAUNCH</small>
+    </button>
+    <button id="pad-right" type="button" class="pad flipper right" aria-label="右フリッパー">
+      <span class="txt"><b>RIGHT</b><small>FLIPPER</small></span><span class="emblem">↖</span>
+    </button>
+  </section>
+  <p class="footnote">長押しで射出力を調整 · 左右同時押し対応<span class="pc"> · キーボード：Z / ／ / Space / N</span></p>
+</div>
+
+<dialog id="guide" class="sheet">
+  <header><h2>遊び方</h2><button type="button" class="close" data-close>閉じる</button></header>
+  <div id="guide-body" class="sheet-body"></div>
+</dialog>
+
+<dialog id="settings" class="sheet small">
+  <header><h2>設定</h2><button type="button" class="close" data-close>閉じる</button></header>
+  <div class="sheet-body">
+    <h3>プレイ設定</h3>
+    <label class="toggle"><span>効果音</span><input type="checkbox" id="set-sound"></label>
+    <label class="toggle"><span>BGM</span><input type="checkbox" id="set-music"></label>
+    <label class="toggle"><span>振動（対応端末のみ）</span><input type="checkbox" id="set-haptics"></label>
+    <h3>ルール</h3>
+    <label class="toggle"><span>落球でミッションをリセット</span><input type="checkbox" id="set-drain"></label>
+    <p class="note">オン（既定）では、球を落とすと選択中・実行中のミッションが終了します。オフにすると次の球へ引き継ぎます。得点と階級はどちらでも引き継ぎます。</p>
+    <h3>このゲームについて</h3>
+    <p class="note">最高スコアと設定はこのブラウザの中だけに保存します。ランキング・ログイン・広告はありません。</p>
+    <p class="links"><a href="../support/">サポート</a><a href="../terms/">利用規約</a><a href="../privacy/">プライバシーポリシー</a></p>
+  </div>
+</dialog>
+
+<dialog id="confirm" class="sheet tiny">
+  <div class="sheet-body center">
+    <p>現在のゲームを終了して、新しく始めますか？</p>
+    <div class="row"><button type="button" class="link" data-close>キャンセル</button><button id="btn-confirm-new" type="button" class="primary danger">新しいゲーム</button></div>
+  </div>
+</dialog>
+
+<noscript><p class="noscript">このゲームを遊ぶには JavaScript を有効にしてください。</p></noscript>
+<script type="module" src="js/main.js?v=20261028"></script>
+</body>
+</html>
